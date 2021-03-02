@@ -12,6 +12,6 @@ while rval:
     if key == 27: # exit on ESC 
         break
     elif key == 32:
-        cv2.imwrite("test.png", frame);
+        cv2.imwrite("./output_images/test.png", frame);
 
 cv2.destroyWindow("Image Preview")
