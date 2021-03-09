@@ -20,6 +20,7 @@ pwm_sig = GPIO.PWM(enA, 1000)
 pwm_sig.start(speed)
 
 def run_motor():
+    global running
     running = True
     if clamp:
         print("ON, CLAMP")
@@ -31,12 +32,14 @@ def run_motor():
         GPIO.output(in2, GPIO.HIGH)
 
 def stop_motor():
+    global running
     running = False
     print("OFF")
-    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in1, GPIO.LOW)
     GPIO.output(in2, GPIO.LOW)
 
 def configure_mode():
+    global running
     if running:
         run_motor()
 
