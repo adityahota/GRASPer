@@ -33,8 +33,8 @@ def run_motor():
 def stop_motor():
     running = False
     print("OFF")
-        GPIO.output(in1, GPIO.HIGH)
-        GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
 
 def configure_mode():
     if running:
@@ -49,7 +49,7 @@ print("3: set speed HI")
 print("X: EXIT program")
 
 while(1):
-    key = raw_input()
+    key = input()
     if key == 'a':
         run_motor()        
     
@@ -80,7 +80,7 @@ while(1):
     elif key == 'x':
         stop_motor()
         GPIO.cleanup()
-        breal
+        break
     
     else:
         print("INVALID ENTRY")
