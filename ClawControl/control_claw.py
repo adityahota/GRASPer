@@ -5,9 +5,16 @@ enA = 18
 in1 = 23
 in2 = 24
 
+low_speed = 25
+med_speed = 50
+hi_speed = 75
+
 clamp = False       # True = clamping mode, False = opening mode
 speed = 25
 running = False
+
+start_time = 0
+stop_time  = 0
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(in1, GPIO.OUT)
@@ -21,7 +28,11 @@ pwm_sig.start(speed)
 
 def run_motor():
     global running
-    running = True
+    global start_time
+
+    if not running:
+        start_time = round(time.time() * 1000)
+        running = True
     if clamp:
         print("ON, CLAMP")
         GPIO.output(in1, GPIO.HIGH)
@@ -33,8 +44,13 @@ def run_motor():
 
 def stop_motor():
     global running
-    running = False
-    print("OFF")
+    global start_time
+    global stop_time
+    stop_time = round(time.time() * 1000)
+    if running:
+        run_time = stop_time - start_time
+        print(f"OFF, RAN FOR {run_time} ms")
+        running = False
     GPIO.output(in1, GPIO.LOW)
     GPIO.output(in2, GPIO.LOW)
 
@@ -70,15 +86,15 @@ while(1):
     
     elif key == '1':
         print("SET SPEED LOW")
-        pwm_sig.ChangeDutyCycle(25)
+        pwm_sig.ChangeDutyCycle(low_speed)
     
     elif key == '2':
         print("SET SPEED MED")
-        pwm_sig.ChangeDutyCycle(50)
+        pwm_sig.ChangeDutyCycle(med_speed)
     
     elif key == '3':
         print("SET SPEED HI")
-        pwm_sig.ChangeDutyCycle(75)
+        pwm_sig.ChangeDutyCycle(hi_speed)
     
     elif key == 'x':
         stop_motor()
