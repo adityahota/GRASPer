@@ -6,14 +6,18 @@ in1 = 23    # Physical pin 16
 in2 = 24    # Physical pin 18
 
 low_speed = 50
-med_speed = 75
+med_speed = 80
 hi_speed = 98
 
 release = False       # True = releasing mode, False = clamping mode
 speed = 25
 running = False
-CLAMP_TIME = 750
-RELEASE_TIME = 750
+CLAMP_TIME = 1700 # 1200 is sufficient but need more time to increase clamping force, to compensate for low speed
+CLAMP_SPEED = med_speed
+RELEASE_TIME = 400
+RELEASE_SPEED = hi_speed
+
+CURR_SPEED = low_speed
 
 start_time = 0
 stop_time  = 0
@@ -106,14 +110,17 @@ try:
         
         elif key == '1':
             print("SET SPEED LOW")
+            CURR_SPEED = low_speed
             pwm_sig.ChangeDutyCycle(low_speed)
         
         elif key == '2':
             print("SET SPEED MED")
+            CURR_SPEED = med_speed
             pwm_sig.ChangeDutyCycle(med_speed)
         
         elif key == '3':
             print("SET SPEED HI")
+            CURR_SPEED = hi_speed
             pwm_sig.ChangeDutyCycle(hi_speed)
         
         elif key == 'x':
@@ -131,16 +138,20 @@ try:
                 print("INVALID TIME ENTRY")
         
         elif key == 'c':
-            # Clamp for 750
+            # Clamp for 1700
             stop_motor()
             release = False
+            pwm_sig.ChangeDutyCycle(CLAMP_SPEED)
             run_ms(CLAMP_TIME)
+            pwm_sig.ChangeDutyCycle(CURR_SPEED)
         
         elif key == 'r':
-            # Release for 750
+            # Release for 400
             stop_motor()
             release = True
+            pwm_sig.ChangeDutyCycle(RELEASE_SPEED)
             run_ms(RELEASE_TIME)
+            pwm_sig.ChangeDutyCycle(CURR_SPEED)
         
         else:
             print("INVALID ENTRY")
